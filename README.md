@@ -2,6 +2,8 @@
 
 [ [English](https://github.com/jaewonE/obsidian-heading-autolink) | [한국어](https://github.com/jaewonE/obsidian-heading-autolink/blob/master/README.ko.md) ]
 
+![Heading Autolink demo](assets/demo.gif)
+
 Heading Autolink is an Obsidian plugin that keeps Markdown heading wikilinks in sync when headings are renamed.
 
 Obsidian already tracks file renames, but it does not automatically update heading targets inside wikilinks. This plugin fills that gap for links such as:

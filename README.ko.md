@@ -2,6 +2,8 @@
 
 [ [English](https://github.com/jaewonE/obsidian-heading-autolink) | [한국어](https://github.com/jaewonE/obsidian-heading-autolink/blob/master/README.ko.md) ]
 
+![Heading Autolink demo](assets/demo.gif)
+
 Heading Autolink는 Markdown heading 이름이 변경되었을 때 Obsidian wikilink의 heading target을 함께 갱신하는 플러그인입니다.
 
 Obsidian은 파일 이름 변경은 추적하지만, wikilink 내부의 heading target은 자동으로 갱신하지 않습니다. 이 플러그인은 다음과 같은 링크를 처리합니다.
