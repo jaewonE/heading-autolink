@@ -123,18 +123,11 @@ Use Obsidian undo for active-editor changes made by the picker or auto alias. Fo
 
 ## Mobile Support
 
-`isDesktopOnly` is set to `false` because the plugin uses the Obsidian API and browser APIs, and does not import Node.js or Electron modules. Mobile support has not been fully tested on iOS or Android.
+`isDesktopOnly` is set to `false` because the plugin uses the Obsidian API and browser APIs, and does not import Node.js or Electron modules. The plugin can run on mobile, but the current picker and editing experience are not optimized for mobile use and may not be suitable for regular mobile workflows. Mobile usability may improve in a future update.
 
 ## Privacy And Network Access
 
-- No network requests.
-- No telemetry.
-- No ads.
-- No account requirement.
-- No payment requirement.
-- No self-update mechanism.
-- No access to files outside the vault.
-- Settings are stored in Obsidian's normal plugin data file for the current vault.
+Heading Autolink does not use network access and does not access files outside the current vault.
 
 ## Installation
 
