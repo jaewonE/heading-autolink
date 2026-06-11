@@ -79,27 +79,33 @@ export default class HeadingAutolinkPlugin extends Plugin {
 			window.clearTimeout(existing);
 		}
 
-		const timer = window.setTimeout(async () => {
-			this.metadataTimers.delete(file.path);
-			const oldSnapshot = this.headingCache.getSnapshot(file);
-			const newSnapshot = this.headingCache.buildSnapshot(file);
-			const renameEvent = this.headingCache.detectSingleHeadingRename(oldSnapshot, newSnapshot);
-
-			if (renameEvent) {
-				const result = await this.autolinkService.updateVaultLinks(renameEvent);
-				if (result.linksChanged > 0) {
-					new Notice(
-						`Heading Autolink updated ${result.linksChanged} link${result.linksChanged === 1 ? '' : 's'} in ${result.filesChanged} file${result.filesChanged === 1 ? '' : 's'}.`,
-					);
-				}
-			}
-
-			if (newSnapshot) {
-				this.headingCache.updateSnapshot(file, newSnapshot);
-			}
+		const timer = window.setTimeout(() => {
+			this.refreshHeadings(file).catch((error: unknown) => {
+				console.error('Heading Autolink failed to refresh headings.', error);
+			});
 		}, METADATA_DEBOUNCE_MS);
 
 		this.metadataTimers.set(file.path, timer);
+	}
+
+	private async refreshHeadings(file: TFile): Promise<void> {
+		this.metadataTimers.delete(file.path);
+		const oldSnapshot = this.headingCache.getSnapshot(file);
+		const newSnapshot = this.headingCache.buildSnapshot(file);
+		const renameEvent = this.headingCache.detectSingleHeadingRename(oldSnapshot, newSnapshot);
+
+		if (renameEvent && this.settings.enableHeadingRenameUpdates) {
+			const result = await this.autolinkService.updateVaultLinks(renameEvent);
+			if (result.linksChanged > 0) {
+				new Notice(
+					`Heading Autolink updated ${result.linksChanged} link${result.linksChanged === 1 ? '' : 's'} in ${result.filesChanged} file${result.filesChanged === 1 ? '' : 's'}.`,
+				);
+			}
+		}
+
+		if (newSnapshot) {
+			this.headingCache.updateSnapshot(file, newSnapshot);
+		}
 	}
 
 	private handleEditorActivity(editor: Editor, file: TFile): void {

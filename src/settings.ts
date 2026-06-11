@@ -2,6 +2,7 @@ import { App, PluginSettingTab, Setting } from 'obsidian';
 import HeadingAutolinkPlugin from './main';
 
 export interface HeadingAutolinkSettings {
+	enableHeadingRenameUpdates: boolean;
 	enableTitlePicker: boolean;
 	enableAutoAlias: boolean;
 	pickerSize: 'small' | 'medium' | 'large';
@@ -10,8 +11,9 @@ export interface HeadingAutolinkSettings {
 }
 
 export const DEFAULT_SETTINGS: HeadingAutolinkSettings = {
+	enableHeadingRenameUpdates: false,
 	enableTitlePicker: true,
-	enableAutoAlias: true,
+	enableAutoAlias: false,
 	pickerSize: 'medium',
 	pickerMaxVisibleItems: 5,
 	ignoreLinksInCodeBlocks: true,
@@ -27,7 +29,19 @@ export class HeadingAutolinkSettingTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Enable Title Picker')
+			.setName('Enable heading rename updates')
+			.setDesc('Update matching heading wikilinks across the vault after a single heading is renamed.')
+			.addToggle((toggle) =>
+				toggle
+					.setValue(this.plugin.settings.enableHeadingRenameUpdates)
+					.onChange(async (value) => {
+						this.plugin.settings.enableHeadingRenameUpdates = value;
+						await this.plugin.saveSettings();
+					}),
+			);
+
+		new Setting(containerEl)
+			.setName('Enable title picker')
 			.setDesc('Show a heading picker when you type # after a simple file wikilink, such as [[note]]#.')
 			.addToggle((toggle) =>
 				toggle
@@ -39,7 +53,7 @@ export class HeadingAutolinkSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName('Enable Auto Alias')
+			.setName('Enable auto alias')
 			.setDesc('Automatically add display text to heading wikilinks after you move away from the line.')
 			.addToggle((toggle) =>
 				toggle
@@ -51,7 +65,7 @@ export class HeadingAutolinkSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName('Picker Size')
+			.setName('Picker size')
 			.setDesc('Controls the visual size of the heading picker popup.')
 			.addDropdown((dropdown) =>
 				dropdown
@@ -66,7 +80,7 @@ export class HeadingAutolinkSettingTab extends PluginSettingTab {
 			);
 
 		new Setting(containerEl)
-			.setName('Picker Max Visible Items')
+			.setName('Picker max visible items')
 			.setDesc('Sets how many heading results are visible before the picker list starts scrolling.')
 			.addText((text) => {
 				text.inputEl.type = 'number';

@@ -1,38 +1,21 @@
 # Heading Autolink
 
-[ [English](https://github.com/jaewonE/obsidian-heading-autolink) | [한국어](https://github.com/jaewonE/obsidian-heading-autolink/blob/master/README.ko.md) ]
+[ [English](https://github.com/jaewonE/heading-autolink) | [한국어](https://github.com/jaewonE/heading-autolink/blob/master/README.ko.md) ]
 
 ![Heading Autolink demo](assets/demo.gif)
 
-Heading Autolink is an Obsidian plugin that keeps Markdown heading wikilinks in sync when headings are renamed.
-
-Obsidian already tracks file renames, but it does not automatically update heading targets inside wikilinks. This plugin fills that gap for links such as:
-
-```markdown
-[[a#title1]]
-[[a#title1|title1]]
-```
-
-When the heading `title1` in `a.md` is renamed to `newTitle1`, matching links in the vault are updated:
-
-```markdown
-[[a#newTitle1]]
-[[a#newTitle1|newTitle1]]
-```
+Heading Autolink helps maintain Markdown heading wikilinks. It can insert heading links with a picker, add missing heading aliases, update heading links after a heading rename, and insert content from a selected heading section.
 
 ## Features
 
-- Detect a single Markdown heading rename and update matching vault wikilinks.
-- Preserve custom aliases while updating the heading target.
-- Update aliases when the alias exactly matches the old heading text.
-- Avoid ambiguous simple links when the old heading text was duplicated.
-- Open a heading picker by typing `#` after a simple file wikilink, for example `[[note]]#`.
-- Insert a single heading link with `Enter` or mouse click.
-- Insert a selected heading and its descendants from the picker using the recursive insert button.
-- Support recursive insertion in plain text, ordered lists, unordered lists, and `- {icon}` lists.
-- Automatically add aliases to heading wikilinks after leaving the line.
+- Open a heading picker by typing `#` after a simple file wikilink, such as `[[note]]#`.
+- Insert heading links in the form `[[note#Heading|Heading]]`.
+- Insert a selected heading and its descendant headings from the picker.
+- Preserve plain text, ordered list, unordered list, and `- {icon}` list formatting where possible.
+- Add aliases to alias-free heading wikilinks after you leave the line.
+- Update matching heading wikilinks across the vault after a single heading is renamed.
+- Preserve custom aliases when the alias does not exactly match the old heading text.
 - Ignore fenced code blocks, inline code, YAML frontmatter, and HTML comments by default.
-- Show a notice with the number of updated files and links after autolink changes are applied.
 
 ## Supported Wikilinks
 
@@ -57,7 +40,9 @@ Unsupported examples:
 [[a|alias]]#
 ```
 
-## Picker
+## Usage
+
+### Insert a heading link
 
 Type `#` immediately after a simple file wikilink:
 
@@ -65,57 +50,91 @@ Type `#` immediately after a simple file wikilink:
 [[note]]#
 ```
 
-If the target note resolves to a Markdown file with headings, the picker opens below the cursor.
+If the target note resolves to a Markdown file with headings, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants.
 
-Default picker controls:
+### Add aliases
 
-| Action | Control |
-| --- | --- |
-| Move selection | Arrow keys |
-| Insert selected heading | `Enter` or heading click |
-| Insert heading and descendants | Left recursive insert button |
-| Filter headings | Search input |
-| Close picker | `Escape` |
-
-The recursive insert button appears as the heading level label by default. When the row is hovered or selected, headings with descendants show the recursive insert icon.
-
-## Auto Alias
-
-When enabled, auto alias updates alias-free heading links after you move away from the line:
+When auto alias is enabled, moving away from a line can change:
 
 ```markdown
 [[a#title1]]
 ```
 
-becomes:
+to:
 
 ```markdown
 [[a#title1|title1]]
 ```
 
-Hierarchical heading links use the final heading segment as the alias:
+Hierarchical heading links use the final heading segment as the alias.
+
+### Update heading links after a heading rename
+
+When heading rename updates are enabled, renaming `title1` to `newTitle1` in `a.md` can update matching links across Markdown files in the vault:
 
 ```markdown
-[[a#heading1#heading2|heading2]]
+[[a#title1]]
+[[a#title1|title1]]
 ```
+
+to:
+
+```markdown
+[[a#newTitle1]]
+[[a#newTitle1|newTitle1]]
+```
+
+The plugin only treats the change as a rename when one heading changed and the heading count and levels stayed the same. If the old heading text was duplicated, simple links such as `[[a#title1]]` are not updated because the target is ambiguous.
+
+## File Access And Modifications
+
+Heading Autolink reads Markdown files in the current vault to resolve links, find headings, and build heading snapshots. It does not read files outside the vault.
+
+The plugin can modify Markdown files in the current vault in these cases:
+
+- The active editor line is changed when auto alias is enabled and you move away from a line containing an alias-free heading wikilink.
+- Markdown files across the vault are changed when heading rename updates are enabled and a single heading rename is detected.
+- The active editor line is changed when you choose a heading or recursive insertion from the picker.
+
+The plugin does not modify non-Markdown files.
 
 ## Settings
 
-- **Enable Title Picker**: Show a heading picker when typing `#` after `[[note]]`.
-- **Enable Auto Alias**: Add missing aliases to heading wikilinks after leaving the line.
-- **Picker Size**: Choose `small`, `medium`, or `large`.
-- **Picker Max Visible Items**: Set how many picker results are visible before scrolling.
-- **Ignore links in code blocks**: Skip links inside fenced code blocks, inline code, YAML frontmatter, and HTML comments.
+- **Enable heading rename updates**: Update matching heading wikilinks across the vault after a single heading is renamed. This is off by default.
+- **Enable title picker**: Show a heading picker when you type `#` after a simple file wikilink.
+- **Enable auto alias**: Add missing display text to heading wikilinks after you move away from the line. This is off by default.
+- **Picker size**: Choose `small`, `medium`, or `large`.
+- **Picker max visible items**: Set how many picker results are visible before scrolling.
+- **Ignore links in code blocks**: Skip wikilinks inside fenced code blocks, inline code, YAML frontmatter, and HTML comments. This is on by default.
 
-Autolink is always enabled and does not have an off switch.
+Turn off **Enable heading rename updates** to prevent automatic vault-wide link replacement. Turn off **Enable auto alias** to prevent automatic alias insertion in the active editor.
 
-## Privacy and Network Access
+## Error Handling And Limits
 
-Heading Autolink works locally inside Obsidian.
+- If a target file cannot be resolved to a Markdown file, the link is ignored.
+- If a heading is missing, unsupported, or ambiguous, the link is ignored.
+- If a link appears inside an ignored range, it is skipped when **Ignore links in code blocks** is enabled.
+- If more than one heading changed at once, vault-wide heading link updates are skipped.
+- A notice shows how many files and links were updated after a heading rename update.
 
-- It does not send notes or settings to any external service.
-- It does not use telemetry.
-- It stores settings in Obsidian's normal plugin data file for the current vault.
+## Reverting Changes
+
+Use Obsidian undo for active-editor changes made by the picker or auto alias. For vault-wide heading rename updates, use your normal backup or version history, such as Obsidian Sync version history, Git, Time Machine, or another vault backup. Review important notes before enabling vault-wide heading rename updates.
+
+## Mobile Support
+
+`isDesktopOnly` is set to `false` because the plugin uses the Obsidian API and browser APIs, and does not import Node.js or Electron modules. Mobile support has not been fully tested on iOS or Android.
+
+## Privacy And Network Access
+
+- No network requests.
+- No telemetry.
+- No ads.
+- No account requirement.
+- No payment requirement.
+- No self-update mechanism.
+- No access to files outside the vault.
+- Settings are stored in Obsidian's normal plugin data file for the current vault.
 
 ## Installation
 
@@ -130,7 +149,7 @@ After the plugin is accepted into the Obsidian Community Plugins directory:
 
 ### Manual Installation
 
-Download the release assets from the latest GitHub release:
+Download these files from the latest GitHub release:
 
 - `main.js`
 - `manifest.json`
@@ -139,10 +158,10 @@ Download the release assets from the latest GitHub release:
 Copy them into:
 
 ```text
-<Vault>/.obsidian/plugins/obsidian-heading-autolink/
+<Vault>/.obsidian/plugins/heading-autolink/
 ```
 
-Then reload Obsidian and enable **Heading Autolink** from **Settings -> Community plugins**.
+Reload Obsidian and enable **Heading Autolink** from **Settings -> Community plugins**.
 
 ## Development
 
@@ -158,15 +177,19 @@ Start the development watcher:
 npm run dev
 ```
 
-Run a production build:
+Run lint and a production build:
 
 ```bash
+npm run lint
 npm run build
 ```
 
-The production build type-checks the plugin, bundles `src/main.ts` into `main.js`, and copies the release files into `build/`.
+The production build type-checks the plugin and bundles `src/main.ts` into `main.js`. Release assets are the root `main.js`, `manifest.json`, and `styles.css` files.
 
-Generated release files are not committed to the repository:
+## License
 
-- `main.js`
-- `build/`
+This project is licensed under the GNU General Public License v3.0. See [LICENSE](LICENSE).
+
+## Attribution
+
+This plugin is built with the Obsidian plugin API, TypeScript, and esbuild. It does not include code copied from another community plugin.

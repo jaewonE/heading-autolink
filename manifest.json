@@ -1,9 +1,9 @@
 {
-	"id": "obsidian-heading-autolink",
+	"id": "heading-autolink",
 	"name": "Heading Autolink",
-	"version": "1.0.0",
-	"minAppVersion": "1.0.0",
-	"description": "Automatically updates heading wikilinks when Markdown headings are renamed, inserts heading links with a picker, and adds aliases to heading links.",
+	"version": "1.0.1",
+	"minAppVersion": "1.8.0",
+	"description": "Link to headings, update aliases, and insert content from linked sections.",
 	"author": "JaewonE",
 	"authorUrl": "https://github.com/jaewonE",
 	"isDesktopOnly": false

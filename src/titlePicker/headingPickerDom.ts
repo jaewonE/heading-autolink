@@ -15,18 +15,18 @@ export function createHeadingPickerDom(params: {
 	onRecursiveClick: (heading: HeadingEntry) => void;
 	hasDescendants: (heading: HeadingEntry) => boolean;
 }): HeadingPickerDom {
-	const rootEl = document.createElement('div');
+	const rootEl = activeDocument.createElement('div');
 	rootEl.className = `heading-autolink-picker heading-autolink-picker--${params.size}`;
 	rootEl.style.setProperty('--heading-autolink-visible-items', String(params.maxVisibleItems));
 
-	const inputEl = document.createElement('input');
+	const inputEl = activeDocument.createElement('input');
 	inputEl.type = 'text';
 	inputEl.className = 'heading-autolink-search';
 	inputEl.placeholder = 'Search headings';
 	inputEl.addEventListener('input', () => params.onQueryChange(inputEl.value));
 	rootEl.appendChild(inputEl);
 
-	const resultsEl = document.createElement('div');
+	const resultsEl = activeDocument.createElement('div');
 	resultsEl.className = 'heading-autolink-results';
 	rootEl.appendChild(resultsEl);
 
@@ -34,14 +34,14 @@ export function createHeadingPickerDom(params: {
 		resultsEl.empty();
 		const rows: HTMLElement[] = [];
 		for (const [index, heading] of headings.entries()) {
-			const row = document.createElement('div');
+			const row = activeDocument.createElement('div');
 			row.className = 'heading-autolink-result-item';
 			if (index === selectedIndex) {
 				row.classList.add('is-selected');
 			}
 
 			const hasDescendants = params.hasDescendants(heading);
-			const recursiveBox = document.createElement(hasDescendants ? 'button' : 'span');
+			const recursiveBox = activeDocument.createElement(hasDescendants ? 'button' : 'span');
 			recursiveBox.className = hasDescendants
 				? 'heading-autolink-recursive-button'
 				: 'heading-autolink-recursive-placeholder';
@@ -49,7 +49,7 @@ export function createHeadingPickerDom(params: {
 			if (hasDescendants) {
 				(recursiveBox as HTMLButtonElement).type = 'button';
 				(recursiveBox as HTMLButtonElement).ariaLabel = 'Insert heading and child headings';
-				recursiveBox.innerHTML = `<span class="heading-autolink-level-icon">${levelText}</span>${downArrowSvg()}`;
+				recursiveBox.append(createLevelIcon(levelText), createDownArrowSvg());
 				recursiveBox.addEventListener('click', (event) => {
 					event.preventDefault();
 					event.stopPropagation();
@@ -59,10 +59,10 @@ export function createHeadingPickerDom(params: {
 				recursiveBox.textContent = levelText;
 			}
 
-			const button = document.createElement('button');
+			const button = activeDocument.createElement('button');
 			button.type = 'button';
 			button.className = 'heading-autolink-heading-button';
-			const text = document.createElement('span');
+			const text = activeDocument.createElement('span');
 			text.className = 'heading-autolink-result-text';
 			text.textContent = heading.text;
 			button.append(text);
@@ -77,12 +77,38 @@ export function createHeadingPickerDom(params: {
 	return { rootEl, inputEl, resultsEl, renderResults };
 }
 
-function downArrowSvg(): string {
-	return `<svg class="heading-autolink-recursive-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-		<path d="M4.5 5h10.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-		<path d="M4.5 9.5h9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-		<path d="M4.5 14h7.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-		<path d="M17.5 5v12" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
-		<path d="M14.5 14.25l3 3 3-3" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
-	</svg>`;
+function createLevelIcon(levelText: string): HTMLSpanElement {
+	const levelIcon = activeDocument.createElement('span');
+	levelIcon.className = 'heading-autolink-level-icon';
+	levelIcon.textContent = levelText;
+	return levelIcon;
+}
+
+function createDownArrowSvg(): SVGSVGElement {
+	const svg = activeDocument.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	svg.classList.add('heading-autolink-recursive-icon');
+	svg.setAttribute('viewBox', '0 0 24 24');
+	svg.setAttribute('aria-hidden', 'true');
+	svg.setAttribute('focusable', 'false');
+
+	for (const attributes of [
+		{ d: 'M4.5 5h10.5', width: '2.2' },
+		{ d: 'M4.5 9.5h9', width: '2.2' },
+		{ d: 'M4.5 14h7.5', width: '2.2' },
+		{ d: 'M17.5 5v12', width: '2.1' },
+		{ d: 'M14.5 14.25l3 3 3-3', width: '2.1', join: 'round' },
+	]) {
+		const path = activeDocument.createElementNS('http://www.w3.org/2000/svg', 'path');
+		path.setAttribute('d', attributes.d);
+		path.setAttribute('fill', 'none');
+		path.setAttribute('stroke', 'currentColor');
+		path.setAttribute('stroke-width', attributes.width);
+		path.setAttribute('stroke-linecap', 'round');
+		if (attributes.join) {
+			path.setAttribute('stroke-linejoin', attributes.join);
+		}
+		svg.appendChild(path);
+	}
+
+	return svg;
 }

@@ -1,12 +1,12 @@
 {
-	"name": "obsidian-heading-autolink",
-	"version": "1.0.0",
-	"description": "Automatically keeps Obsidian wikilinks in sync with Markdown heading renames and inserts heading links with aliases.",
+	"name": "heading-autolink",
+	"version": "1.0.1",
+	"description": "Link to headings, update aliases, and insert content from linked sections.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production && mkdir -p build && cp main.js manifest.json styles.css build/",
+		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
 		"version": "node version-bump.mjs && git add manifest.json versions.json",
 		"lint": "eslint ."
 	},

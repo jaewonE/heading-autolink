@@ -7,6 +7,12 @@ import { hasUnsafeHeadingChars } from '../utils';
 import { createHeadingPickerDom, HeadingPickerDom } from './headingPickerDom';
 import { createPickerKeyboardController, PickerKeyboardController } from './headingPickerKeyboard';
 
+interface EditorWithCoords extends Editor {
+	cm?: {
+		coordsAtPos?: (pos: number) => { left: number; top: number } | null;
+	};
+}
+
 export interface HeadingPickerTriggerRange {
 	line: number;
 	startCh: number;
@@ -62,11 +68,11 @@ export class HeadingPicker {
 		});
 
 		this.positionPicker();
-		document.body.appendChild(this.dom.rootEl);
+		activeDocument.body.appendChild(this.dom.rootEl);
 		this.app.keymap.pushScope(this.keyboard.scope);
-		document.addEventListener('keydown', this.keyboard.handleKeyDownCapture, true);
-		setTimeout(() => this.dom?.inputEl.focus(), 0);
-		setTimeout(() => document.addEventListener('click', this.handleClickOutside), 0);
+		activeDocument.addEventListener('keydown', this.keyboard.handleKeyDownCapture, true);
+		window.setTimeout(() => this.dom?.inputEl.focus(), 0);
+		window.setTimeout(() => activeDocument.addEventListener('click', this.handleClickOutside), 0);
 		this.render();
 	}
 
@@ -76,16 +82,16 @@ export class HeadingPicker {
 		}
 		this.isClosed = true;
 		if (this.dom?.rootEl.parentNode) {
-			document.body.removeChild(this.dom.rootEl);
+			activeDocument.body.removeChild(this.dom.rootEl);
 		}
 		if (this.keyboard) {
 			this.app.keymap.popScope(this.keyboard.scope);
-			document.removeEventListener('keydown', this.keyboard.handleKeyDownCapture, true);
+			activeDocument.removeEventListener('keydown', this.keyboard.handleKeyDownCapture, true);
 		}
-		document.removeEventListener('click', this.handleClickOutside);
+		activeDocument.removeEventListener('click', this.handleClickOutside);
 		this.onClose();
 		if (restoreEditorFocus) {
-			setTimeout(() => {
+			window.setTimeout(() => {
 				this.editor.focus();
 				this.editor.setCursor(this.initialCursor);
 			}, 0);
@@ -146,7 +152,7 @@ export class HeadingPicker {
 			{ line: this.trigger.line, ch: replaceTo },
 		);
 		this.close(false);
-		setTimeout(() => this.editor.focus(), 0);
+		window.setTimeout(() => this.editor.focus(), 0);
 	}
 
 	private hasDescendants(heading: HeadingEntry): boolean {
@@ -165,8 +171,8 @@ export class HeadingPicker {
 		if (!this.dom) {
 			return;
 		}
-		// @ts-ignore Obsidian's public Editor type does not expose the CM6 view.
-		const coords = this.editor.cm?.coordsAtPos?.(this.editor.posToOffset(this.editor.getCursor()));
+		const editorWithCoords = this.editor as EditorWithCoords;
+		const coords = editorWithCoords.cm?.coordsAtPos?.(this.editor.posToOffset(this.editor.getCursor()));
 		const left = coords?.left ?? window.innerWidth / 2;
 		const top = coords?.top ?? window.innerHeight / 2;
 		this.dom.rootEl.style.left = `${left}px`;
