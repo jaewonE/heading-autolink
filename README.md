@@ -8,7 +8,7 @@ Heading Autolink helps maintain Markdown heading wikilinks. It can insert headin
 
 ## Features
 
-- Open a heading picker by typing `#` after a simple file wikilink, such as `[[note]]#`.
+- Open a heading picker by typing `#` after a file wikilink, such as `[[note]]#` or `[[note|alias]]#`.
 - Insert heading links in the form `[[note#Heading|Heading]]`.
 - Insert a selected heading and its descendant headings from the picker.
 - Preserve plain text, ordered list, unordered list, and `- {icon}` list formatting where possible.
@@ -28,6 +28,7 @@ Supported examples:
 [[a.md#title1]]
 [[a#heading1#heading2]]
 [[a#heading1#heading2|heading2]]
+[[a|alias]]#
 ```
 
 Unsupported examples:
@@ -37,20 +38,25 @@ Unsupported examples:
 [[#local heading]]
 [[a#^block]]
 [title](a.md#title1)
-[[a|alias]]#
 ```
 
 ## Usage
 
 ### Insert a heading link
 
-Type `#` immediately after a simple file wikilink:
+Type `#` immediately after a file wikilink:
 
 ```markdown
 [[note]]#
 ```
 
-If the target note resolves to a Markdown file with headings, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants.
+You can also type `#` after a wikilink that already has an alias:
+
+```markdown
+[[note|alias]]#
+```
+
+If the target note resolves to a Markdown file with headings, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants. When the trigger link already has an alias, the selected heading link replaces it.
 
 ### Add aliases
 

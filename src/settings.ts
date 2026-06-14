@@ -42,7 +42,7 @@ export class HeadingAutolinkSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Enable title picker')
-			.setDesc('Show a heading picker when you type # after a simple file wikilink, such as [[note]]#.')
+			.setDesc('Show a heading picker when you type # after a file wikilink, such as [[note]]# or [[note|alias]]#.')
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.enableTitlePicker)

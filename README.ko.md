@@ -8,7 +8,7 @@ Heading Autolink는 Markdown heading wikilink를 관리하는 Obsidian 플러그
 
 ## 주요 기능
 
-- `[[note]]#`처럼 simple file wikilink 뒤에 `#`를 입력하면 heading picker를 엽니다.
+- `[[note]]#` 또는 `[[note|alias]]#`처럼 file wikilink 뒤에 `#`를 입력하면 heading picker를 엽니다.
 - `[[note#Heading|Heading]]` 형식의 heading link를 삽입합니다.
 - 선택한 heading과 하위 heading을 picker에서 함께 삽입합니다.
 - plain text, ordered list, unordered list, `- {icon}` list 형식을 가능한 유지합니다.
@@ -28,6 +28,7 @@ Heading Autolink는 Markdown heading wikilink를 관리하는 Obsidian 플러그
 [[a.md#title1]]
 [[a#heading1#heading2]]
 [[a#heading1#heading2|heading2]]
+[[a|alias]]#
 ```
 
 비지원 예시:
@@ -37,20 +38,25 @@ Heading Autolink는 Markdown heading wikilink를 관리하는 Obsidian 플러그
 [[#local heading]]
 [[a#^block]]
 [title](a.md#title1)
-[[a|alias]]#
 ```
 
 ## 사용 방법
 
 ### Heading link 삽입
 
-simple file wikilink 바로 뒤에 `#`를 입력합니다.
+file wikilink 바로 뒤에 `#`를 입력합니다.
 
 ```markdown
 [[note]]#
 ```
 
-대상 note가 Markdown 파일로 resolve되고 heading이 있으면 picker가 커서 아래에 열립니다. `Enter`를 누르거나 heading을 클릭하면 단일 heading link가 삽입됩니다. Recursive insert 버튼을 사용하면 선택한 heading과 하위 heading을 함께 삽입합니다.
+이미 alias가 있는 wikilink 뒤에도 `#`를 입력할 수 있습니다.
+
+```markdown
+[[note|alias]]#
+```
+
+대상 note가 Markdown 파일로 resolve되고 heading이 있으면 picker가 커서 아래에 열립니다. `Enter`를 누르거나 heading을 클릭하면 단일 heading link가 삽입됩니다. Recursive insert 버튼을 사용하면 선택한 heading과 하위 heading을 함께 삽입합니다. 트리거 link에 이미 alias가 있으면 선택한 heading link가 기존 alias를 대체합니다.
 
 ### Alias 추가
 

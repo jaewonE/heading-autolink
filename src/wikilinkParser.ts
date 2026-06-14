@@ -61,7 +61,7 @@ export interface TitlePickerTrigger {
 }
 
 export function findTitlePickerTrigger(linePrefix: string): TitlePickerTrigger | null {
-	const match = /(?:^|[^!])\[\[([^|\]#]+)\]\]#$/.exec(linePrefix);
+	const match = /(?:^|[^!])\[\[([^|\]#]+)(?:\|[^\]]*)?\]\]#$/.exec(linePrefix);
 	if (!match || match.index < 0) {
 		return null;
 	}
@@ -69,10 +69,13 @@ export function findTitlePickerTrigger(linePrefix: string): TitlePickerTrigger |
 	if (!targetText) {
 		return null;
 	}
-	const raw = `[[${match[1]}]]#`;
+	const triggerStart = linePrefix.lastIndexOf('[[', linePrefix.length - 1);
+	if (triggerStart < 0) {
+		return null;
+	}
 	return {
 		targetText,
-		start: linePrefix.length - raw.length,
+		start: triggerStart,
 		end: linePrefix.length,
 	};
 }
