@@ -1,6 +1,6 @@
 {
 	"name": "heading-autolink",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Link to headings, update aliases, and insert content from linked sections.",
 	"main": "main.js",
 	"type": "module",

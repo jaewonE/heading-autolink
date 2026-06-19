@@ -1,7 +1,7 @@
 {
 	"id": "heading-autolink",
 	"name": "Heading Autolink",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"minAppVersion": "1.8.0",
 	"description": "Link to headings, update aliases, and insert content from linked sections.",
 	"author": "JaewonE",

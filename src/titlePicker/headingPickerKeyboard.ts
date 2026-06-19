@@ -11,13 +11,13 @@ export function createPickerKeyboardController(params: {
 	onSubmit: (options: { forceAlias: boolean }) => void;
 	onClose: () => void;
 }): PickerKeyboardController {
-	const handleKeyboardAction = (event: KeyboardEvent): boolean => {
+	const handleKeyboardAction = (event: KeyboardEvent, forceAlias = false): boolean => {
 		if (event.key === 'ArrowDown') {
 			params.onMove(1);
 		} else if (event.key === 'ArrowUp') {
 			params.onMove(-1);
 		} else if (event.key === 'Enter') {
-			params.onSubmit({ forceAlias: event.metaKey || event.ctrlKey });
+			params.onSubmit({ forceAlias: forceAlias || event.metaKey || event.ctrlKey });
 		} else if (event.key === 'Escape') {
 			params.onClose();
 		} else {
@@ -26,12 +26,12 @@ export function createPickerKeyboardController(params: {
 		return true;
 	};
 
-	const withKeyboardCapture = (key: string) => {
+	const withKeyboardCapture = (key: string, options: { forceAlias?: boolean } = {}) => {
 		return (event: KeyboardEvent) => {
 			event.preventDefault();
 			event.stopPropagation();
 			if (key === event.key) {
-				handleKeyboardAction(event);
+				handleKeyboardAction(event, options.forceAlias === true);
 			}
 			return false;
 		};
@@ -41,6 +41,9 @@ export function createPickerKeyboardController(params: {
 	scope.register([], 'ArrowDown', withKeyboardCapture('ArrowDown'));
 	scope.register([], 'ArrowUp', withKeyboardCapture('ArrowUp'));
 	scope.register([], 'Enter', withKeyboardCapture('Enter'));
+	scope.register(['Mod'], 'Enter', withKeyboardCapture('Enter', { forceAlias: true }));
+	scope.register(['Meta'], 'Enter', withKeyboardCapture('Enter', { forceAlias: true }));
+	scope.register(['Ctrl'], 'Enter', withKeyboardCapture('Enter', { forceAlias: true }));
 	scope.register([], 'Escape', withKeyboardCapture('Escape'));
 
 	const handleKeyDownCapture = (event: KeyboardEvent) => {
