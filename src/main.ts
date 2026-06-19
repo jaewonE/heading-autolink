@@ -163,7 +163,7 @@ export default class HeadingAutolinkPlugin extends Plugin {
 		}
 
 		const snapshot = this.headingCache.getSnapshot(targetFile) ?? this.headingCache.buildSnapshot(targetFile);
-		if (!snapshot || snapshot.headings.length === 0) {
+		if (!snapshot) {
 			return;
 		}
 

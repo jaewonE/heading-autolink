@@ -11,6 +11,7 @@ Heading Autolink는 Markdown heading wikilink를 관리하는 Obsidian 플러그
 - `[[note]]#` 또는 `[[note|alias]]#`처럼 file wikilink 뒤에 `#`를 입력하면 heading picker를 엽니다.
 - `[[note#Heading|Heading]]` 형식의 heading link를 삽입합니다.
 - 선택한 heading과 하위 heading을 picker에서 함께 삽입합니다.
+- Picker 검색 텍스트를 macOS `Command+Enter`, Windows/Linux `Ctrl+Enter`, 또는 일치하는 heading 결과가 없을 때 `Enter`로 빠르게 file alias로 삽입합니다.
 - plain text, ordered list, unordered list, `- {icon}` list 형식을 가능한 유지합니다.
 - 줄을 벗어났을 때 alias 없는 heading wikilink에 alias를 추가합니다.
 - 단일 heading rename이 감지되면 vault 전체의 일치하는 heading wikilink를 갱신합니다.
@@ -56,7 +57,15 @@ file wikilink 바로 뒤에 `#`를 입력합니다.
 [[note|alias]]#
 ```
 
-대상 note가 Markdown 파일로 resolve되고 heading이 있으면 picker가 커서 아래에 열립니다. `Enter`를 누르거나 heading을 클릭하면 단일 heading link가 삽입됩니다. Recursive insert 버튼을 사용하면 선택한 heading과 하위 heading을 함께 삽입합니다. 트리거 link에 이미 alias가 있으면 선택한 heading link가 기존 alias를 대체합니다.
+대상 note가 Markdown 파일로 resolve되면 picker가 커서 아래에 열립니다. `Enter`를 누르거나 heading을 클릭하면 단일 heading link가 삽입됩니다. Recursive insert 버튼을 사용하면 선택한 heading과 하위 heading을 함께 삽입합니다. 트리거 link에 이미 alias가 있으면 선택한 heading link가 기존 alias를 대체합니다.
+
+Picker 검색어가 있는 상태에서 macOS는 `Command+Enter`, Windows/Linux는 `Ctrl+Enter`를 누르면 heading 결과가 보여도 검색어를 file alias로 삽입합니다.
+
+```markdown
+[[note|search text]]
+```
+
+검색어와 일치하는 heading 결과가 없으면 `Enter`도 검색어를 file alias로 삽입합니다.
 
 ### Alias 추가
 
@@ -100,7 +109,7 @@ Heading Autolink는 link resolve, heading 탐색, heading snapshot 생성을 위
 
 - Auto alias가 활성화되어 있고 alias 없는 heading wikilink가 있는 줄을 벗어날 때 active editor line을 수정합니다.
 - Heading rename update가 활성화되어 있고 단일 heading rename이 감지되면 vault 전체 Markdown 파일을 수정합니다.
-- Picker에서 heading 또는 recursive insertion을 선택하면 active editor line을 수정합니다.
+- Picker에서 heading, recursive insertion 또는 fast file alias를 선택하면 active editor line을 수정합니다.
 
 플러그인은 Markdown이 아닌 파일을 수정하지 않습니다.
 
@@ -125,7 +134,7 @@ Heading Autolink는 link resolve, heading 탐색, heading snapshot 생성을 위
 
 ## 되돌리기
 
-Picker 또는 auto alias가 active editor에 만든 변경은 Obsidian undo를 사용해 되돌릴 수 있습니다. Vault-wide heading rename update는 Obsidian Sync version history, Git, Time Machine 또는 별도 vault backup 같은 일반 백업과 버전 기록을 사용해 되돌리십시오. 중요한 note가 있다면 vault-wide heading rename update를 켜기 전에 먼저 검토하십시오.
+Picker, fast file alias 또는 auto alias가 active editor에 만든 변경은 Obsidian undo를 사용해 되돌릴 수 있습니다. Vault-wide heading rename update는 Obsidian Sync version history, Git, Time Machine 또는 별도 vault backup 같은 일반 백업과 버전 기록을 사용해 되돌리십시오. 중요한 note가 있다면 vault-wide heading rename update를 켜기 전에 먼저 검토하십시오.
 
 ## 모바일 지원
 

@@ -1,6 +1,6 @@
 import { App, Editor } from 'obsidian';
 import { HeadingEntry, HeadingSnapshot } from '../headingTypes';
-import { buildHeadingLink, isDuplicateHeadingText } from '../linkBuilder';
+import { buildFileAliasLink, buildHeadingLink, isDuplicateHeadingText } from '../linkBuilder';
 import { formatRecursiveLinks } from '../listFormatter';
 import { getLineContext } from '../markdownContext';
 import { hasUnsafeHeadingChars } from '../utils';
@@ -28,6 +28,7 @@ export class HeadingPicker {
 	private selectedIndex = 0;
 	private optionEls: HTMLElement[] = [];
 	private isClosed = false;
+	private query = '';
 	private readonly initialCursor: ReturnType<Editor['getCursor']>;
 
 	constructor(
@@ -46,9 +47,6 @@ export class HeadingPicker {
 
 	open(): void {
 		this.allHeadings = this.snapshot.headings.filter((heading) => !hasUnsafeHeadingChars(heading.text));
-		if (this.allHeadings.length === 0) {
-			return;
-		}
 		this.filteredHeadings = this.allHeadings;
 
 		this.dom = createHeadingPickerDom({
@@ -63,7 +61,7 @@ export class HeadingPicker {
 		this.keyboard = createPickerKeyboardController({
 			app: this.app,
 			onMove: (delta) => this.moveSelection(delta),
-			onSubmit: () => this.submit(),
+			onSubmit: (options) => this.submit(options),
 			onClose: () => this.close(),
 		});
 
@@ -99,6 +97,7 @@ export class HeadingPicker {
 	}
 
 	private filter(query: string): void {
+		this.query = query;
 		const normalized = query.toLowerCase();
 		this.filteredHeadings = this.allHeadings.filter((heading) =>
 			heading.text.toLowerCase().includes(normalized),
@@ -117,11 +116,29 @@ export class HeadingPicker {
 		this.optionEls[this.selectedIndex]?.scrollIntoView({ block: 'nearest' });
 	}
 
-	private submit(): void {
+	private submit(options: { forceAlias: boolean }): void {
 		const heading = this.filteredHeadings[this.selectedIndex];
-		if (heading) {
+		const alias = this.query.trim();
+		if (options.forceAlias && alias) {
+			this.selectAlias(alias);
+		} else if (heading) {
 			this.selectHeading(heading, false);
+		} else if (alias) {
+			this.selectAlias(alias);
 		}
+	}
+
+	private selectAlias(alias: string): void {
+		this.editor.replaceRange(
+			buildFileAliasLink({
+				originalLinkpathText: this.trigger.originalLinkpathText,
+				alias,
+			}),
+			{ line: this.trigger.line, ch: this.trigger.startCh },
+			{ line: this.trigger.line, ch: this.trigger.endCh },
+		);
+		this.close(false);
+		window.setTimeout(() => this.editor.focus(), 0);
 	}
 
 	private selectHeading(heading: HeadingEntry, recursive: boolean): void {

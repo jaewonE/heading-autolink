@@ -11,6 +11,7 @@ Heading Autolink helps maintain Markdown heading wikilinks. It can insert headin
 - Open a heading picker by typing `#` after a file wikilink, such as `[[note]]#` or `[[note|alias]]#`.
 - Insert heading links in the form `[[note#Heading|Heading]]`.
 - Insert a selected heading and its descendant headings from the picker.
+- Use the picker search text as a fast file alias with `Command+Enter` on macOS, `Ctrl+Enter` on Windows/Linux, or `Enter` when no heading result matches.
 - Preserve plain text, ordered list, unordered list, and `- {icon}` list formatting where possible.
 - Add aliases to alias-free heading wikilinks after you leave the line.
 - Update matching heading wikilinks across the vault after a single heading is renamed.
@@ -56,7 +57,15 @@ You can also type `#` after a wikilink that already has an alias:
 [[note|alias]]#
 ```
 
-If the target note resolves to a Markdown file with headings, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants. When the trigger link already has an alias, the selected heading link replaces it.
+If the target note resolves to a Markdown file, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants. When the trigger link already has an alias, the selected heading link replaces it.
+
+When the picker search has text, `Command+Enter` on macOS or `Ctrl+Enter` on Windows/Linux inserts the search text as a file alias even when heading results are visible:
+
+```markdown
+[[note|search text]]
+```
+
+If the search has no matching heading results, `Enter` also inserts the search text as a file alias.
 
 ### Add aliases
 
@@ -100,7 +109,7 @@ The plugin can modify Markdown files in the current vault in these cases:
 
 - The active editor line is changed when auto alias is enabled and you move away from a line containing an alias-free heading wikilink.
 - Markdown files across the vault are changed when heading rename updates are enabled and a single heading rename is detected.
-- The active editor line is changed when you choose a heading or recursive insertion from the picker.
+- The active editor line is changed when you choose a heading, recursive insertion, or fast file alias from the picker.
 
 The plugin does not modify non-Markdown files.
 
@@ -125,7 +134,7 @@ Turn off **Enable heading rename updates** to prevent automatic vault-wide link 
 
 ## Reverting Changes
 
-Use Obsidian undo for active-editor changes made by the picker or auto alias. For vault-wide heading rename updates, use your normal backup or version history, such as Obsidian Sync version history, Git, Time Machine, or another vault backup. Review important notes before enabling vault-wide heading rename updates.
+Use Obsidian undo for active-editor changes made by the picker, fast file alias, or auto alias. For vault-wide heading rename updates, use your normal backup or version history, such as Obsidian Sync version history, Git, Time Machine, or another vault backup. Review important notes before enabling vault-wide heading rename updates.
 
 ## Mobile Support
 

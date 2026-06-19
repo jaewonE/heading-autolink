@@ -25,3 +25,7 @@ export function buildLinkFromSegments(params: {
 	const alias = params.alias === undefined ? '' : `|${params.alias}`;
 	return `[[${params.originalLinkpathText}#${params.segments.join('#')}${alias}]]`;
 }
+
+export function buildFileAliasLink(params: { originalLinkpathText: string; alias: string }): string {
+	return `[[${params.originalLinkpathText}|${params.alias}]]`;
+}

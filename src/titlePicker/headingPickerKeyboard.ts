@@ -8,7 +8,7 @@ export interface PickerKeyboardController {
 export function createPickerKeyboardController(params: {
 	app: App;
 	onMove: (delta: number) => void;
-	onSubmit: () => void;
+	onSubmit: (options: { forceAlias: boolean }) => void;
 	onClose: () => void;
 }): PickerKeyboardController {
 	const handleKeyboardAction = (event: KeyboardEvent): boolean => {
@@ -17,7 +17,7 @@ export function createPickerKeyboardController(params: {
 		} else if (event.key === 'ArrowUp') {
 			params.onMove(-1);
 		} else if (event.key === 'Enter') {
-			params.onSubmit();
+			params.onSubmit({ forceAlias: event.metaKey || event.ctrlKey });
 		} else if (event.key === 'Escape') {
 			params.onClose();
 		} else {
