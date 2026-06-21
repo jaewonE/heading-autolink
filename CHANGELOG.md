@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+
+- Opens the picker for resolved Markdown wikilinks even when the target note has no headings, leaving the heading result list empty while Fast Alias remains available.
+
 ## 1.2.1
 
 - Registers picker `Mod+Enter`, `Meta+Enter`, and `Ctrl+Enter` shortcuts so Fast Alias insertion works through Obsidian's keymap scope.

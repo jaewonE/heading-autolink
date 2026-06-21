@@ -25,10 +25,11 @@ export class HeadingCache {
 	}
 
 	buildSnapshot(file: TFile): HeadingSnapshot | null {
-		const headings = this.app.metadataCache.getFileCache(file)?.headings;
-		if (!headings) {
+		const fileCache = this.app.metadataCache.getFileCache(file);
+		if (!fileCache) {
 			return null;
 		}
+		const headings = fileCache.headings ?? [];
 
 		const stack: HeadingEntry[] = [];
 		const entries = headings.map((heading, index) => {

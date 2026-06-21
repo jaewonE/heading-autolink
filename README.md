@@ -57,7 +57,7 @@ You can also type `#` after a wikilink that already has an alias:
 [[note|alias]]#
 ```
 
-If the target note resolves to a Markdown file, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants. When the trigger link already has an alias, the selected heading link replaces it.
+If the target note resolves to a Markdown file, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants. When the trigger link already has an alias, the selected heading link replaces it. If the target note has no headings, the picker still opens with an empty heading list so you can enter a fast file alias.
 
 When the picker search has text, `Command+Enter` on macOS or `Ctrl+Enter` on Windows/Linux inserts the search text as a file alias even when heading results are visible:
 
