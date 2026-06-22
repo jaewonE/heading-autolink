@@ -61,11 +61,18 @@ export interface TitlePickerTrigger {
 }
 
 export function findTitlePickerTrigger(linePrefix: string): TitlePickerTrigger | null {
-	const match = /(?:^|[^!])\[\[([^|\]#]+)(?:\|[^\]]*)?\]\]#$/.exec(linePrefix);
+	const match = /(?:^|[^!])\[\[([^\]]+)\]\]#$/.exec(linePrefix);
 	if (!match || match.index < 0) {
 		return null;
 	}
-	const targetText = match[1]?.trim() ?? '';
+	const body = match[1] ?? '';
+	const aliasIndex = body.indexOf('|');
+	const targetPart = aliasIndex >= 0 ? body.slice(0, aliasIndex) : body;
+	if (targetPart.includes('#^')) {
+		return null;
+	}
+	const hashIndex = targetPart.indexOf('#');
+	const targetText = (hashIndex >= 0 ? targetPart.slice(0, hashIndex) : targetPart).trim();
 	if (!targetText) {
 		return null;
 	}

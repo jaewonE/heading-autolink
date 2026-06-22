@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- Opens the picker after existing heading wikilinks such as `[[note#Heading|Heading]]#`, allowing a selected heading or Fast Alias to replace the trigger link.
+
 ## 1.2.2
 
 - Opens the picker for resolved Markdown wikilinks even when the target note has no headings, leaving the heading result list empty while Fast Alias remains available.

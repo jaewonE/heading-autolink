@@ -8,7 +8,7 @@ Heading Autolink는 Markdown heading wikilink를 관리하는 Obsidian 플러그
 
 ## 주요 기능
 
-- `[[note]]#` 또는 `[[note|alias]]#`처럼 file wikilink 뒤에 `#`를 입력하면 heading picker를 엽니다.
+- `[[note]]#`, `[[note|alias]]#`, `[[note#Heading|Heading]]#`처럼 file wikilink 또는 기존 heading wikilink 뒤에 `#`를 입력하면 heading picker를 엽니다.
 - `[[note#Heading|Heading]]` 형식의 heading link를 삽입합니다.
 - 선택한 heading과 하위 heading을 picker에서 함께 삽입합니다.
 - Picker 검색 텍스트를 macOS `Command+Enter`, Windows/Linux `Ctrl+Enter`, 또는 일치하는 heading 결과가 없을 때 `Enter`로 빠르게 file alias로 삽입합니다.
@@ -30,6 +30,7 @@ Heading Autolink는 Markdown heading wikilink를 관리하는 Obsidian 플러그
 [[a#heading1#heading2]]
 [[a#heading1#heading2|heading2]]
 [[a|alias]]#
+[[a#title1|title1]]#
 ```
 
 비지원 예시:
@@ -55,6 +56,12 @@ file wikilink 바로 뒤에 `#`를 입력합니다.
 
 ```markdown
 [[note|alias]]#
+```
+
+이미 heading을 가리키는 wikilink 뒤에서도 같은 picker가 열립니다.
+
+```markdown
+[[note#Old heading|Old heading]]#
 ```
 
 대상 note가 Markdown 파일로 resolve되면 picker가 커서 아래에 열립니다. `Enter`를 누르거나 heading을 클릭하면 단일 heading link가 삽입됩니다. Recursive insert 버튼을 사용하면 선택한 heading과 하위 heading을 함께 삽입합니다. 트리거 link에 이미 alias가 있으면 선택한 heading link가 기존 alias를 대체합니다. 대상 note에 heading이 없으면 heading list가 비어 있는 picker가 열리며, fast file alias를 입력할 수 있습니다.
@@ -116,7 +123,7 @@ Heading Autolink는 link resolve, heading 탐색, heading snapshot 생성을 위
 ## 설정
 
 - **Enable heading rename updates**: 단일 heading rename 후 vault 전체의 일치하는 heading wikilink를 갱신합니다. 기본값은 꺼짐입니다.
-- **Enable title picker**: simple file wikilink 뒤에 `#`를 입력했을 때 heading picker를 엽니다.
+- **Enable title picker**: file wikilink 또는 기존 heading wikilink 뒤에 `#`를 입력했을 때 heading picker를 엽니다.
 - **Enable auto alias**: 줄을 벗어났을 때 heading wikilink에 빠진 표시 텍스트를 추가합니다. 기본값은 꺼짐입니다.
 - **Picker size**: `small`, `medium`, `large` 중 picker 크기를 선택합니다.
 - **Picker max visible items**: 스크롤이 생기기 전까지 보이는 picker 결과 수를 설정합니다.

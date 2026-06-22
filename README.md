@@ -8,7 +8,7 @@ Heading Autolink helps maintain Markdown heading wikilinks. It can insert headin
 
 ## Features
 
-- Open a heading picker by typing `#` after a file wikilink, such as `[[note]]#` or `[[note|alias]]#`.
+- Open a heading picker by typing `#` after a file wikilink or an existing heading wikilink, such as `[[note]]#`, `[[note|alias]]#`, or `[[note#Heading|Heading]]#`.
 - Insert heading links in the form `[[note#Heading|Heading]]`.
 - Insert a selected heading and its descendant headings from the picker.
 - Use the picker search text as a fast file alias with `Command+Enter` on macOS, `Ctrl+Enter` on Windows/Linux, or `Enter` when no heading result matches.
@@ -30,6 +30,7 @@ Supported examples:
 [[a#heading1#heading2]]
 [[a#heading1#heading2|heading2]]
 [[a|alias]]#
+[[a#title1|title1]]#
 ```
 
 Unsupported examples:
@@ -55,6 +56,12 @@ You can also type `#` after a wikilink that already has an alias:
 
 ```markdown
 [[note|alias]]#
+```
+
+The same picker opens after a wikilink that already points to a heading:
+
+```markdown
+[[note#Old heading|Old heading]]#
 ```
 
 If the target note resolves to a Markdown file, the picker opens below the cursor. Press `Enter` or click a heading to insert one heading link. Use the recursive insert button to insert the selected heading and its descendants. When the trigger link already has an alias, the selected heading link replaces it. If the target note has no headings, the picker still opens with an empty heading list so you can enter a fast file alias.
@@ -116,7 +123,7 @@ The plugin does not modify non-Markdown files.
 ## Settings
 
 - **Enable heading rename updates**: Update matching heading wikilinks across the vault after a single heading is renamed. This is off by default.
-- **Enable title picker**: Show a heading picker when you type `#` after a simple file wikilink.
+- **Enable title picker**: Show a heading picker when you type `#` after a file wikilink or an existing heading wikilink.
 - **Enable auto alias**: Add missing display text to heading wikilinks after you move away from the line. This is off by default.
 - **Picker size**: Choose `small`, `medium`, or `large`.
 - **Picker max visible items**: Set how many picker results are visible before scrolling.
