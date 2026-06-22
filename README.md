@@ -72,6 +72,12 @@ When the picker search has text, `Command+Enter` on macOS or `Ctrl+Enter` on Win
 [[note|search text]]
 ```
 
+When Fast Alias is inserted from an existing heading wikilink, the heading target is preserved:
+
+```markdown
+[[note#Old heading|search text]]
+```
+
 If the search has no matching heading results, `Enter` also inserts the search text as a file alias.
 
 ### Add aliases

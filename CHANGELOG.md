@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+- Preserves an existing heading target when Fast Alias is inserted from a heading wikilink trigger such as `[[note#Heading|Heading]]#`.
+
 ## 1.3.0
 
 - Opens the picker after existing heading wikilinks such as `[[note#Heading|Heading]]#`, allowing a selected heading or Fast Alias to replace the trigger link.

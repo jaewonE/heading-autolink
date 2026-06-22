@@ -56,6 +56,7 @@ export function parseWikilinks(content: string): WikilinkToken[] {
 
 export interface TitlePickerTrigger {
 	targetText: string;
+	aliasTargetText: string;
 	start: number;
 	end: number;
 }
@@ -76,12 +77,14 @@ export function findTitlePickerTrigger(linePrefix: string): TitlePickerTrigger |
 	if (!targetText) {
 		return null;
 	}
+	const aliasTargetText = targetPart.trim();
 	const triggerStart = linePrefix.lastIndexOf('[[', linePrefix.length - 1);
 	if (triggerStart < 0) {
 		return null;
 	}
 	return {
 		targetText,
+		aliasTargetText,
 		start: triggerStart,
 		end: linePrefix.length,
 	};

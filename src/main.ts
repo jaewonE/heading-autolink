@@ -177,6 +177,7 @@ export default class HeadingAutolinkPlugin extends Plugin {
 				startCh: trigger.start,
 				endCh: trigger.end,
 				originalLinkpathText: trigger.targetText,
+				aliasTargetText: trigger.aliasTargetText,
 			},
 			{
 				pickerSize: this.settings.pickerSize,

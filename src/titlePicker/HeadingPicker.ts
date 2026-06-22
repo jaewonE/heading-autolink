@@ -18,6 +18,7 @@ export interface HeadingPickerTriggerRange {
 	startCh: number;
 	endCh: number;
 	originalLinkpathText: string;
+	aliasTargetText: string;
 }
 
 export class HeadingPicker {
@@ -131,7 +132,7 @@ export class HeadingPicker {
 	private selectAlias(alias: string): void {
 		this.editor.replaceRange(
 			buildFileAliasLink({
-				originalLinkpathText: this.trigger.originalLinkpathText,
+				originalLinkpathText: this.trigger.aliasTargetText,
 				alias,
 			}),
 			{ line: this.trigger.line, ch: this.trigger.startCh },
